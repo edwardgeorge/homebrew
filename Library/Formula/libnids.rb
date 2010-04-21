@@ -5,7 +5,6 @@ class Libnids <Formula
   homepage 'http://libnids.sourceforge.net/'
   md5 '72d37c79c85615ffe158aa524d649610'
 
-  depends_on 'libpcap'
   depends_on 'libnet'
   depends_on 'pkg-config'
   depends_on 'glib'
