@@ -16,7 +16,8 @@ class Ffmpeg <Formula
       "--enable-shared",
       "--enable-pthreads",
       "--enable-nonfree",
-      "--enable-gpl"
+      "--enable-gpl",
+      "--disable-indevs"
     ]
 
     configure_flags << "--enable-libx264" if Formula.factory('x264').installed?
