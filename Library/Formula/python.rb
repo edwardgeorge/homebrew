@@ -26,8 +26,8 @@ class Python <Formula
   end
 
   def install
-    args = ["--prefix=#{prefix}"]
-    args << "--enable-framework" if ARGV.include? '--framework'
+    args = ["--prefix=#{prefix}", "--enable-ipv6"]
+    args << "--enable-framework=#{HOMEBREW_PREFIX}/Frameworks" if ARGV.include? '--framework'
     
     # Note --intel is an old flag, supported here for back compat.
     if ARGV.include? '--universal' or ARGV.include? '--intel'
