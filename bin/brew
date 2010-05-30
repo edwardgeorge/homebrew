@@ -172,6 +172,10 @@ begin
         else
           puts "No formulae were updated." unless updater.pending_formulae_changes?
         end
+        if !updater.added_formulae.empty?
+          ohai "The following formulae were added:"
+          puts_columns updater.added_formulae
+        end
       end
     else
       abort "Please `brew install git' first."
