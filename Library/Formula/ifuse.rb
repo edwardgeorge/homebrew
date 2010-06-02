@@ -13,10 +13,10 @@ class Ifuse <Formula
     This depends on the MacFUSE installation from http://code.google.com/p/macfuse/
     MacFUSE must be installed prior to installing this formula.
 
-    To use you will have to stop apple's similarly named usbmuxd and start the usbmuxd
-    provided by homebrew's usbmuxd formula.
+    To use you will have to stop Apple's similarly named usbmuxd and start the usbmuxd
+    provided by Homebrew's usbmuxd formula.
 
-    To stop apple's usbmuxd:
+    To stop Apple's usbmuxd:
     $ sudo launchctl remove com.apple.launchctl
     EOS
   end
