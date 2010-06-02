@@ -11,7 +11,6 @@ class Usbmuxd <Formula
   aka 'usb-multiplex-daemon'
 
   def install
-    inreplace 'udev/CMakeLists.txt', '/lib/udev/rules.d/', "#{prefix}/udev/rules.d/"
     system "cmake . #{std_cmake_parameters}"
     system "make install"
   end
