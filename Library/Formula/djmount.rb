@@ -20,8 +20,12 @@ class Djmount <Formula
 
   def install
     ENV.append "CFLAGS", "-D__FreeBSD__=10"
-    system "./configure", "--disable-debug", "--disable-dependency-tracking", "--prefix=#{prefix}", "--with-fuse-prefix=/usr/local",\
-           "--with-external-libupnp", "--with-libupnp-prefix=#{HOMEBREW_PREFIX}"
+    system "./configure", "--disable-debug", 
+                          "--disable-dependency-tracking",
+                          "--prefix=#{prefix}",
+                          "--with-fuse-prefix=/usr/local",
+                          "--with-external-libupnp",
+                          "--with-libupnp-prefix=#{HOMEBREW_PREFIX}"
     system "make"
     system "make install"
   end
