@@ -6,7 +6,7 @@ class Swig <Formula
   md5 '2df766c9e03e02811b1ab4bba1c7b9cc'
 
   def keg_only?
-    "provided by osx but doesn't work with non-system python."
+    :provided_by_osx
   end
 
 
