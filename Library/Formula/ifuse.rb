@@ -12,6 +12,12 @@ class Ifuse <Formula
     <<-EOS.undent
     This depends on the MacFUSE installation from http://code.google.com/p/macfuse/
     MacFUSE must be installed prior to installing this formula.
+
+    To use you will have to stop apple's similarly named usbmuxd and start the usbmuxd
+    provided by homebrew's usbmuxd formula.
+
+    To stop apple's usbmuxd:
+    $ sudo launchctl remove com.apple.launchctl
     EOS
   end
 
