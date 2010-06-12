@@ -8,10 +8,14 @@ class Libplist <Formula
   depends_on 'cmake'
   depends_on 'glib'
   depends_on 'libxml2'
-  depends_on 'swig'
 
   def install
+    # Disable Python bindings.
+    inreplace "CMakeLists.txt", 'OPTION(ENABLE_PYTHON "Enable Python bindings (needs Swig)" ON)', '# Disabled Python Bindings'
     system "cmake . #{std_cmake_parameters}"
     system "make install"
+
+    # Remove 'plutil', which duplicates the system-provided one. Leave the versioned one, though.
+    rm (bin+'plutil')
   end
 end
