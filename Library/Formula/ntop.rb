@@ -4,6 +4,7 @@ class Ntop <Formula
   url 'http://downloads.sourceforge.net/project/ntop/ntop/ntop-3.4-pre3/ntop-3.4-pre3.tar.gz'
   homepage 'http://www.ntop.org/'
   md5 '4b4977b6d5f78110d32af09bff7e4bfa'
+  version '3.4pre3'
 
  depends_on 'wget'
  depends_on 'gawk'
