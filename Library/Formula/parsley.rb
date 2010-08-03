@@ -28,7 +28,7 @@ class Parsley <Formula
     # remove the refs to /opt/local and use this opportunity to link to argp
     inreplace 'configure', '-L/opt/local/lib', "-L#{argpwd}"
     inreplace 'configure', '-I/opt/local/include', "-I#{argpwd}"
-    system "./configure", "--disable-debug", "--disable-dependency-tracking", "--prefix=#{prefix}"
+    system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}"
     system "make install"
   end
 end
