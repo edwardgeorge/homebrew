@@ -7,7 +7,6 @@ class AlacDecoder <Formula
 
   def install
     system "make"
-    system "mkdir", bin
-    mv 'alac', bin+'alac'
+    bin.install 'alac'
   end
 end
