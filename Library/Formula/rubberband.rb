@@ -38,9 +38,14 @@ class Rubberband <Formula
     system "make -f Makefile.osx"
     bin.install 'bin/rubberband'
     lib.install ['lib/librubberband.dylib', 'lib/librubberband.a']
+    include.install 'rubberband'
 
     if ARGV.include? '--vamp-plugin'
         lib.install 'lib/vamp-rubberband.dylib'
     end
+
+    # pkg-config files
+    inreplace 'rubberband.pc.in', '%PREFIX%', "#{prefix}"
+    (lib + 'pkgconfig').install 'rubberband.pc.in' => 'rubberband.pc'
   end
 end
