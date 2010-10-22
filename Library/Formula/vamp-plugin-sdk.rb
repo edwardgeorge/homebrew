@@ -28,6 +28,14 @@ class VampPluginSdk <Formula
     (prefix + 'examples').install ['examples/vamp-example-plugins.dylib',
                                    'examples/vamp-example-plugins.cat']
 
+    #pkg-config
+    inreplace 'pkgconfig/vamp.pc.in', '%PREFIX%', "#{prefix}"
+    inreplace 'pkgconfig/vamp-sdk.pc.in', '%PREFIX%', "#{prefix}"
+    inreplace 'pkgconfig/vamp-hostsdk.pc.in', '%PREFIX%', "#{prefix}"
+    (lib + 'pkgconfig').install 'pkgconfig/vamp.pc.in' => 'vamp.pc'
+    (lib + 'pkgconfig').install 'pkgconfig/vamp-sdk.pc.in' => 'vamp-sdk.pc'
+    (lib + 'pkgconfig').install 'pkgconfig/vamp-hostsdk.pc.in' => 'vamp-hostsdk.pc'
+
     # build vamp-plugin-tester
     VampPluginTester.new.brew do
         ENV.append 'CXXFLAGS', "-I#{include}"
