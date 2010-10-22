@@ -1,5 +1,10 @@
 require 'formula'
 
+class VampPluginTester <Formula
+  url 'http://downloads.sourceforge.net/project/vamp/vamp-plugin-tester/1.0/vamp-plugin-tester-1.0.tar.gz'
+  md5 '6a7c04557fa5673c0dc2fc54c0450533'
+end
+
 class VampPluginSdk <Formula
   url 'http://downloads.sourceforge.net/project/vamp/vamp-plugin-sdk/2.2/vamp-plugin-sdk-2.2.tar.gz'
   homepage 'http://www.vamp-plugins.org/'
@@ -10,7 +15,6 @@ class VampPluginSdk <Formula
 
   def install
     ENV.append 'CXXFLAGS', "-I#{HOMEBREW_PREFIX}/include -I."
-    #ENV.deparallelize
     inreplace 'build/Makefile.osx', /^CXXFLAGS\s+=.+$/, "CXXFLAGS = #{ENV['CXXFLAGS']}"
     inreplace 'build/Makefile.osx', /^LDFLAGS\s+=.+$/, "LDFLAGS = #{ENV['LDFLAGS']}"
     inreplace 'build/Makefile.osx', /^DYNAMIC_LDFLAGS\s+= \$\(ARCHFLAGS\)/, 'DYNAMIC_LDFLAGS = $(LDFLAGS)'
@@ -23,6 +27,14 @@ class VampPluginSdk <Formula
     bin.install 'host/vamp-simple-host'
     (prefix + 'examples').install ['examples/vamp-example-plugins.dylib',
                                    'examples/vamp-example-plugins.cat']
+
+    # build vamp-plugin-tester
+    VampPluginTester.new.brew do
+        ENV.append 'CXXFLAGS', "-I#{include}"
+        ENV.append 'LDFLAGS', "-L#{lib}"
+        system 'make'
+        bin.install 'vamp-plugin-tester'
+    end
   end
 
   def caveats; <<-EOS
