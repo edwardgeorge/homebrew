@@ -19,17 +19,19 @@ class Rubberband <Formula
     # the OSX makefile in the current release is incorrect.
     # http://www.breakfastquay.com/forum/comments.php?DiscussionID=16
     system 'curl -LO http://code.breakfastquay.com/projects/rubberband/repository/raw/misc/Makefile.osx'
-    # remove some flags
-    inreplace 'Makefile.osx', '-isysroot /Developer/SDKs/MacOSX10.4u.sdk', ''
-    inreplace 'Makefile.osx', '-arch i386 -arch ppc', ''
-    # remove relative includes (assumes you build in same dir as vamp)
-    inreplace 'Makefile.osx', '-I../include -I../vamp-plugin-sdk', ''
-    inreplace 'Makefile.osx', '-L../lib', ''
-    inreplace 'Makefile.osx', '-L../vamp-plugin-sdk/vamp-sdk', ''
-    # change dynamic lib extension
-    inreplace 'Makefile.osx', /^DYNAMIC_EXTENSION\s+:= .so$/, 'DYNAMIC_EXTENSION = .dylib'
-    # remove LADSPA plugin target to avoid dependency
-    inreplace 'Makefile.osx', /^(all: bin lib .+)\$\(LADSPA_TARGET\)/, '\1'
+    inreplace 'Makefile.osx' do |s|
+        # remove some flags
+        s.gsub! '-isysroot /Developer/SDKs/MacOSX10.4u.sdk', ''
+        s.gsub! '-arch i386 -arch ppc', ''
+        # remove relative includes (assumes you build in same dir as vamp)
+        s.gsub! '-I../include -I../vamp-plugin-sdk', ''
+        s.gsub! '-L../lib', ''
+        s.gsub! '-L../vamp-plugin-sdk/vamp-sdk', ''
+        # change dynamic lib extension
+        s.gsub! /^DYNAMIC_EXTENSION\s+:= .so$/, 'DYNAMIC_EXTENSION = .dylib'
+        # remove LADSPA plugin target to avoid dependency
+        s.gsub! /^(all: bin lib .+)\$\(LADSPA_TARGET\)/, '\1'
+    end
 
     if !ARGV.include? '--vamp-plugin'
         inreplace 'Makefile.osx', /^(all: bin lib .+)\$\(VAMP_TARGET\)/, '\1'

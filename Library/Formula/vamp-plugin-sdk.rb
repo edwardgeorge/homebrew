@@ -15,9 +15,11 @@ class VampPluginSdk <Formula
 
   def install
     ENV.append 'CXXFLAGS', "-I#{HOMEBREW_PREFIX}/include -I."
-    inreplace 'build/Makefile.osx', /^CXXFLAGS\s+=.+$/, "CXXFLAGS = #{ENV['CXXFLAGS']}"
-    inreplace 'build/Makefile.osx', /^LDFLAGS\s+=.+$/, "LDFLAGS = #{ENV['LDFLAGS']}"
-    inreplace 'build/Makefile.osx', /^DYNAMIC_LDFLAGS\s+= \$\(ARCHFLAGS\)/, 'DYNAMIC_LDFLAGS = $(LDFLAGS)'
+    inreplace 'build/Makefile.osx' do |s|
+        s.gsub! /^CXXFLAGS\s+=.+$/, "CXXFLAGS = #{ENV['CXXFLAGS']}"
+        s.gsub! /^LDFLAGS\s+=.+$/, "LDFLAGS = #{ENV['LDFLAGS']}"
+        s.gsub! /^DYNAMIC_LDFLAGS\s+= \$\(ARCHFLAGS\)/, 'DYNAMIC_LDFLAGS = $(LDFLAGS)'
+    end
     system "make -f build/Makefile.osx"
     lib.install ['libvamp-hostsdk.dylib',
                  'libvamp-sdk.dylib',
