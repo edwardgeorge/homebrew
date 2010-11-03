@@ -18,6 +18,7 @@ class Ushare <Formula
   def install
     # Need to explicitly add gettext here.
     ENV.append 'LDFLAGS', "-lintl"
+    ENV.append 'CFLAGS', ENV['CPPFLAGS']
 
     inreplace 'configure', /config.h/, 'src/config.h'
     system "./configure", "--disable-debug",
