@@ -1,37 +1,50 @@
 require 'formula'
 
 class Darkice <Formula
-  # standard darkice:
-  #url 'http://darkice.googlecode.com/files/darkice-0.20.1.tar.gz'
-  #md5 'cf4b8f81b9e4a92a8cd57d15fcbb4969'
   # coreaudio brach of darkice:
-  url 'http://darksnow.radiolivre.org/darkice-osx-0.20.tar.gz'
-  md5 'c83f5b1210023a1cb1d0724edab601d8'
+  head 'http://darkice.googlecode.com/svn/darkice/branches/darkice-macosx'
   homepage 'http://code.google.com/p/darkice/'
 
   depends_on 'libvorbis'
   depends_on 'lame'
   depends_on 'two-lame'
   depends_on 'faac'
+  # CoreAudio requires Jack headers to build.
+  # Preference is JackOSX over Homebrew.
+  depends_on 'jack' if ARGV.include? '--with-jack'
 
   def options
     [
-        ["--with-jackosx", "Use JackOSX install."],
-        ["--with-core", "CoreAudio support. (needs JackOSX)"],
+        # disable following 2 options to keep it simple for users.
+        #["--disable-coreaudio", "Disable CoreAudio support."],
+        #["--with-jackosx", "Use JackOSX install. (implied with CoreAudio support)"],
+        ["--with-jack", "Use Homebrew's Jack instead of JackOSX."],
     ]
   end
 
-
-
   def install
-    args = ["./configure", "--disable-dependency-tracking", "--prefix=#{prefix}", "--with-lame-prefix=#{HOMEBREW_PREFIX}",
-        "--with-vorbis-prefix=#{HOMEBREW_PREFIX}", "--with-twolame-prefix=#{HOMEBREW_PREFIX}",
+    inreplace 'autogen.sh', 'libtool', 'glibtool'
+    args = ["./autogen.sh", "--disable-dependency-tracking", "--prefix=#{prefix}",
+        "--with-lame-prefix=#{HOMEBREW_PREFIX}",
+        "--with-vorbis-prefix=#{HOMEBREW_PREFIX}",
+        "--with-twolame-prefix=#{HOMEBREW_PREFIX}",
         "--with-faac-prefix=#{HOMEBREW_PREFIX}"]
-    args << "--with-core=yes" if ARGV.include? '--with-core'
-    if ARGV.include? '--with-jackosx' or ARGV.include? '--with-core'
-      args << "--with-jack-prefix=/usr/local" # core requires jack
+    args << "--with-core=yes" if !ARGV.include? '--disable-coreaudio'
+    if ARGV.include? '--with-jack'
+      # use Homebrew jack
+      args << "--with-jack-prefix=#{HOMEBREW_PREFIX}"
+    elsif !ARGV.include? '--disable-coreaudio' or ARGV.include? '--with-jackosx'
+      # otherwise if coreaudio is left enabled or the --with-jackosx option is
+      # specified then set the jack prefix to /usr/local
+      args << "--with-jack-prefix=/usr/local"  # JackOSX install location
     end
     system *args
     system "make install"
+  end
+
+  def caveats; <<-EOS.undent
+      CoreAudio support requires Jack Headers, this formula assumes JackOSX is installed.
+      If Homebrew's Jack is required please provide the --with-jack option.
+      EOS
   end
 end
