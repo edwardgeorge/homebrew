@@ -9,19 +9,18 @@ class Darkice <Formula
   depends_on 'lame'
   depends_on 'two-lame'
   depends_on 'faac'
-  # CoreAudio requires Jack headers to build.
   depends_on 'jack'
 
   def install
     inreplace 'autogen.sh', 'libtool', 'glibtool'
-    args = ["./autogen.sh", "--disable-dependency-tracking", "--prefix=#{prefix}",
-        "--with-lame-prefix=#{HOMEBREW_PREFIX}",
-        "--with-vorbis-prefix=#{HOMEBREW_PREFIX}",
-        "--with-twolame-prefix=#{HOMEBREW_PREFIX}",
-        "--with-faac-prefix=#{HOMEBREW_PREFIX}",
-        "--with-jack-prefix=#{HOMEBREW_PREFIX}",
-        "--with-core=yes"]
-    system *args
+    system "./autogen.sh", "--disable-dependency-tracking",
+                           "--prefix=#{prefix}",
+                           "--with-lame-prefix=#{HOMEBREW_PREFIX}",
+                           "--with-vorbis-prefix=#{HOMEBREW_PREFIX}",
+                           "--with-twolame-prefix=#{HOMEBREW_PREFIX}",
+                           "--with-faac-prefix=#{HOMEBREW_PREFIX}",
+                           "--with-jack-prefix=#{HOMEBREW_PREFIX}",
+                           "--with-core=yes"
     system "make install"
   end
 end
