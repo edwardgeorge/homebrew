@@ -1,26 +1,16 @@
 require 'formula'
 
 class Darkice <Formula
-  # coreaudio brach of darkice:
+  # coreaudio brach of darkice
   head 'http://darkice.googlecode.com/svn/darkice/branches/darkice-macosx'
-  homepage 'http://code.google.com/p/darkice/'
+  homepage 'http://darkice.org/'
 
   depends_on 'libvorbis'
   depends_on 'lame'
   depends_on 'two-lame'
   depends_on 'faac'
   # CoreAudio requires Jack headers to build.
-  # Preference is JackOSX over Homebrew.
-  depends_on 'jack' if ARGV.include? '--with-jack'
-
-  def options
-    [
-        # disable following 2 options to keep it simple for users.
-        #["--disable-coreaudio", "Disable CoreAudio support."],
-        #["--with-jackosx", "Use JackOSX install. (implied with CoreAudio support)"],
-        ["--with-jack", "Use Homebrew's Jack instead of JackOSX."],
-    ]
-  end
+  depends_on 'jack'
 
   def install
     inreplace 'autogen.sh', 'libtool', 'glibtool'
@@ -28,23 +18,10 @@ class Darkice <Formula
         "--with-lame-prefix=#{HOMEBREW_PREFIX}",
         "--with-vorbis-prefix=#{HOMEBREW_PREFIX}",
         "--with-twolame-prefix=#{HOMEBREW_PREFIX}",
-        "--with-faac-prefix=#{HOMEBREW_PREFIX}"]
-    args << "--with-core=yes" if !ARGV.include? '--disable-coreaudio'
-    if ARGV.include? '--with-jack'
-      # use Homebrew jack
-      args << "--with-jack-prefix=#{HOMEBREW_PREFIX}"
-    elsif !ARGV.include? '--disable-coreaudio' or ARGV.include? '--with-jackosx'
-      # otherwise if coreaudio is left enabled or the --with-jackosx option is
-      # specified then set the jack prefix to /usr/local
-      args << "--with-jack-prefix=/usr/local"  # JackOSX install location
-    end
+        "--with-faac-prefix=#{HOMEBREW_PREFIX}",
+        "--with-jack-prefix=#{HOMEBREW_PREFIX}",
+        "--with-core=yes"]
     system *args
     system "make install"
-  end
-
-  def caveats; <<-EOS.undent
-      CoreAudio support requires Jack Headers, this formula assumes JackOSX is installed.
-      If Homebrew's Jack is required please provide the --with-jack option.
-      EOS
   end
 end
