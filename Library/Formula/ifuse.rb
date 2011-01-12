@@ -1,9 +1,9 @@
 require 'formula'
 
 class Ifuse <Formula
-  url 'http://www.libimobiledevice.org/downloads/ifuse-1.0.0.tar.bz2'
+  url 'http://www.libimobiledevice.org/downloads/ifuse-1.1.0.tar.bz2'
   homepage 'http://www.libimobiledevice.org/'
-  md5 '325d58abe182afa95187e6c55f2bba5f'
+  md5 'd8b127450ce36c6b78d0ea01aa746ac3'
 
   depends_on 'pkg-config' => :build
   depends_on 'glib'
