@@ -14,6 +14,7 @@ There are a few options for customzing the build.
   --universal: Builds combined 32-/64-bit Intel binaries.
   --framework: Builds a "Framework" version of Python.
   --static:    Builds static instead of shared libraries.
+  --no-poll:   Don't include Apple's broken poll implementation.
 
 site-packages
 -------------
@@ -62,6 +63,7 @@ class Python < Formula
       ["--universal", "Build for both 32 & 64 bit Intel."],
       ["--static", "Build static libraries."],
       ["--ipv6", "Enable IPv6."]
+      ["--no-poll", "Remove HAVE_POLL.* options from build."]
     ]
   end
 
@@ -126,6 +128,11 @@ class Python < Formula
       '#sqlite_defines.append(("SQLITE_OMIT_LOAD_EXTENSION", "1"))'
 
     system "./configure", *args
+
+    if ARGV.include? '--no-poll'
+      inreplace 'pyconfig.h', /.*?(HAVE_POLL[_A-Z]*).*/, '#undef \1'
+    end
+
     system "make"
     ENV.j1 # Installs must be serialized
     system "make install"
