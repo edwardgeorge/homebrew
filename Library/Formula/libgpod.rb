@@ -21,8 +21,8 @@ class Libgpod <Formula
     ENV.append "LIBTOOLIZE", "glibtoolize"
     ENV.append "ACLOCAL_FLAGS", "-I /usr/local/share/aclocal -I /usr/local/Cellar/gettext/0.17/share/aclocal/"
     inreplace 'autogen.sh', '--enable-gtk-doc ', ''
-    system "./autogen.sh"
-    system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking"
+    system "./autogen.sh", "--prefix=#{prefix}"
+    #system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking"
     inreplace 'Makefile', /SUBDIRS = (.*)docs/, 'SUBDIRS = \1'
     system "make install"
   end
