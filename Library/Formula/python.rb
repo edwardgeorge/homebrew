@@ -32,7 +32,7 @@ class Python < Formula
       ["--framework", "Do a 'Framework' build instead of a UNIX-style build."],
       ["--universal", "Build for both 32 & 64 bit Intel."],
       ["--static", "Build static libraries."],
-      ["--ipv6", "Enable IPv6."]
+      ["--ipv6", "Enable IPv6."],
       ["--no-poll", "Remove HAVE_POLL.* options from build."]
     ]
   end
