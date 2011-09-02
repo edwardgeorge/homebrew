@@ -104,6 +104,9 @@ def quiet_system cmd, *args
 end
 
 def curl *args
+  # See https://github.com/mxcl/homebrew/issues/6103
+  args << "--insecure" if MacOS.version < 10.6
+
   safe_system '/usr/bin/curl', HOMEBREW_CURL_ARGS, HOMEBREW_USER_AGENT, *args unless args.empty?
 end
 
@@ -235,9 +238,20 @@ def nostdout
 end
 
 module MacOS extend self
+  def version
+    MACOS_VERSION
+  end
 
   def default_cc
     Pathname.new("/usr/bin/cc").realpath.basename.to_s
+  end
+
+  def default_compiler
+    case default_cc
+      when /^gcc/ then :gcc
+      when /^llvm/ then :llvm
+      when "clang" then :clang
+    end
   end
 
   def gcc_42_build_version
@@ -365,8 +379,12 @@ module GitHub extend self
     issues = []
 
     open "http://github.com/api/v2/yaml/issues/search/mxcl/homebrew/open/#{name}" do |f|
-      YAML::load(f.read)['issues'].each do |issue|
-        issues << 'https://github.com/mxcl/homebrew/issues/#issue/%s' % issue['number']
+      yaml = YAML::load(f.read);
+      yaml['issues'].each do |issue|
+        # don't include issues that just refer to the tool in their body
+        if issue['title'].include? name
+          issues << 'https://github.com/mxcl/homebrew/issues/#issue/%s' % issue['number']
+        end
       end
     end
 
